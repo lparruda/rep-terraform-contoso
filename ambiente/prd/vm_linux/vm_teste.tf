@@ -26,7 +26,7 @@ module "vm_teste" {
   tags = {
     env        = "prd"
     management = "terraform"
-    vscode = "testenovo"
+    vscode = "teste"
   }
 
 }
