@@ -23,4 +23,9 @@ module "vm_teste" {
     }
   }
 
+  tags = {
+    env        = "prd"
+    management = "terraform"
+  }
+
 }

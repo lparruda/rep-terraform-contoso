@@ -111,7 +111,18 @@ variable "network_interfaces" {
   }
 
 }
+variable "tags" {
+type = map
+default = {
+  area = "infraestrutura"
+  deployedby = "Terraform"
+  environment = "prd"
+  project = "Projeto Bradesco"
+  provider = "azr"
+  region = "brazilsouth"
+}
 
+}
 
 
 

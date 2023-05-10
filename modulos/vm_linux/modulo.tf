@@ -3,7 +3,7 @@ for_each = var.network_interfaces
   name                = each.key
   location            = var.local
   resource_group_name = var.resource_group_name
-  
+   tags = var.tags
   
 
   ip_configuration {
@@ -26,7 +26,8 @@ resource "azurerm_linux_virtual_machine" "example" {
   admin_username                  = var.admin_username
   admin_password                  = var.admin_password
   network_interface_ids = values(azurerm_network_interface.example)[*].id
-  
+  #tags = merge(local.common_tags,var.tags)
+  tags = var.tags
 
 
   os_disk {
