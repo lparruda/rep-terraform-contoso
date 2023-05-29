@@ -1,8 +1,14 @@
 variable "rg_name" {
-    type = string
+    type = map(object({
+      name = string
+      local = string
+    }))
+    default = {
+      null = {
+        name = null
+        local = null
+      }
+    }
   
 }
-variable "local" {
-    type = string
-  
-}
+
