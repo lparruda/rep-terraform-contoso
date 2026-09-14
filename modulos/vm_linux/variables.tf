@@ -117,7 +117,7 @@ default = {
   area = "infraestrutura"
   deployedby = "Terraform"
   environment = "prd"
-  project = "Projeto | Bradesco"
+  project = "Projeto | Contoso"
   provider = "azr"
   region = "brazilsouth"
 }
