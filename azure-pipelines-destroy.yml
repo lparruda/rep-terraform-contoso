@@ -1,0 +1,97 @@
+trigger: none
+
+parameters:
+  - name: confirmDestroy
+    displayName: 'Confirmar destruição total do ambiente Contoso (VM, VNet e RG)?'
+    type: boolean
+    default: false
+
+variables:
+  azureServiceConnection: 'sc-azure-subscription'
+  backendResourceGroup: 'rg-terraform-br'
+  backendStorageAccount: 'sttfstatev2pereira8950'
+  backendContainer: 'tfstate'
+
+stages:
+  - stage: DestroyVM
+    displayName: '1. Teardown Linux VM'
+    condition: eq('${{ parameters.confirmDestroy }}', true)
+    jobs:
+      - job: DestroyVMJob
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: 'latest'
+          - task: AzureCLI@2
+            displayName: 'Destroy VM'
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/prd/vm_linux'
+              inlineScript: |
+                set -e
+                terraform init \
+                  -backend-config="resource_group_name=$(backendResourceGroup)" \
+                  -backend-config="storage_account_name=$(backendStorageAccount)" \
+                  -backend-config="container_name=$(backendContainer)" \
+                  -backend-config="key=contoso-vm.tfstate"
+                terraform destroy -auto-approve
+
+  - stage: DestroyNetwork
+    displayName: '2. Teardown Virtual Network'
+    dependsOn: DestroyVM
+    condition: and(succeeded(), eq('${{ parameters.confirmDestroy }}', true))
+    jobs:
+      - job: DestroyNetJob
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: 'latest'
+          - task: AzureCLI@2
+            displayName: 'Destroy Network'
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/network_prd'
+              inlineScript: |
+                set -e
+                terraform init \
+                  -backend-config="resource_group_name=$(backendResourceGroup)" \
+                  -backend-config="storage_account_name=$(backendStorageAccount)" \
+                  -backend-config="container_name=$(backendContainer)" \
+                  -backend-config="key=contoso-vnet.tfstate"
+                terraform destroy -auto-approve
+
+  - stage: DestroyResourceGroup
+    displayName: '3. Teardown Resource Group'
+    dependsOn: DestroyNetwork
+    condition: and(succeeded(), eq('${{ parameters.confirmDestroy }}', true))
+    jobs:
+      - job: DestroyRGJob
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: 'latest'
+          - task: AzureCLI@2
+            displayName: 'Destroy Resource Group'
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/resource_groups'
+              inlineScript: |
+                set -e
+                terraform init \
+                  -backend-config="resource_group_name=$(backendResourceGroup)" \
+                  -backend-config="storage_account_name=$(backendStorageAccount)" \
+                  -backend-config="container_name=$(backendContainer)" \
+                  -backend-config="key=contoso-rg.tfstate"
+                terraform destroy -auto-approve
