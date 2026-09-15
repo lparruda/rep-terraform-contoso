@@ -1,3 +1,42 @@
+# 1. IP Público Estático Standard
+resource "azurerm_public_ip" "pip_vm_linux" {
+  name                = "pip-vmlinux1"
+  resource_group_name = "rg-contoso-prd"
+  location            = "brazilsouth"
+  allocation_method   = "Static"
+  sku                 = "Standard"
+
+  tags = {
+    env        = "prd"
+    management = "terraform"
+  }
+}
+
+# 2. Network Security Group (SSH - Porta 22)
+resource "azurerm_network_security_group" "nsg_vm_linux" {
+  name                = "nsg-vmlinux1"
+  resource_group_name = "rg-contoso-prd"
+  location            = "brazilsouth"
+
+  security_rule {
+    name                       = "Allow-SSH"
+    priority                   = 1000
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags = {
+    env        = "prd"
+    management = "terraform"
+  }
+}
+
+# 3. Módulo VM Linux
 module "vm_teste" {
   source = "../../../modulos/vm_linux"
 
@@ -6,9 +45,8 @@ module "vm_teste" {
   vm_name                         = "vmlinux1"
   size                            = "Standard_F2"
   disable_password_authentication = false
-  admin_username                  = "avaroot"
-  admin_password                  = "Alexandre@2051"
-
+  admin_username                  = "azroot"
+  admin_password                  = "AlexDumas2051"
 
   os_disk_caching              = "ReadWrite"
   os_disk_storage_account_type = "Standard_LRS"
@@ -20,13 +58,24 @@ module "vm_teste" {
       private_ip_address            = null
       primary                       = true
       subnet_id                     = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-prd/providers/Microsoft.Network/virtualNetworks/vnet_prd/subnets/subnet_prd1"
+      public_ip_address_id          = azurerm_public_ip.pip_vm_linux.id
     }
   }
 
   tags = {
     env        = "prd"
     management = "terraform"
-    vscode = "teste"
+    vscode     = "teste"
   }
+}
 
+# 4. Associação do NSG à NIC da VM
+resource "azurerm_network_interface_security_group_association" "nic_nsg" {
+  network_interface_id      = module.vm_teste.nic_ids["vm_linux_data_nic"]
+  network_security_group_id = azurerm_network_security_group.nsg_vm_linux.id
+}
+
+# 5. Output para exibir o IP gerado após o apply
+output "vm_public_ip" {
+  value = azurerm_public_ip.pip_vm_linux.ip_address
 }
