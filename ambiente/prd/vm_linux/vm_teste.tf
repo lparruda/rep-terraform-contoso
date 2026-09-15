@@ -43,7 +43,7 @@ module "vm_teste" {
   resource_group_name             = "rg-contoso-prd"
   local                           = "brazilsouth"
   vm_name                         = "vmlinux1"
-  size                            = "Standard_F2"
+  size                            = "Standard_D2s_v5"
   disable_password_authentication = false
   admin_username                  = "azroot"
   admin_password                  = "AlexDumas2051"
