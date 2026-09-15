@@ -19,3 +19,17 @@ module "network_prd" {
 
 
 }
+import {
+  to = module.network_prd.azurerm_virtual_network.example
+  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-prd/providers/Microsoft.Network/virtualNetworks/vnet_prd"
+}
+
+import {
+  to = module.network_prd.azurerm_subnet.example["subnet_prd1"]
+  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-prd/providers/Microsoft.Network/virtualNetworks/vnet_prd/subnets/subnet_prd1"
+}
+
+import {
+  to = module.network_prd.azurerm_subnet.example["subnet_prd2"]
+  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-prd/providers/Microsoft.Network/virtualNetworks/vnet_prd/subnets/subnet_prd2"
+}
