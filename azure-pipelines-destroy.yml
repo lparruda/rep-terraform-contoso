@@ -2,7 +2,7 @@ trigger: none
 
 parameters:
   - name: confirmDestroy
-    displayName: 'Confirmar destruição total do ambiente Contoso (VM, VNet e RG)?'
+    displayName: 'Confirmar destruição total da infraestrutura?'
     type: boolean
     default: false
 
@@ -11,6 +11,7 @@ variables:
   backendResourceGroup: 'rg-terraform-br'
   backendStorageAccount: 'sttfstatev2pereira8950'
   backendContainer: 'tfstate'
+  terraformVersion: '1.9.5'
 
 stages:
   - stage: DestroyVM
@@ -21,6 +22,15 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
+          - checkout: self
+
+          - bash: |
+              curl -fsSL -o /tmp/terraform.zip "https://releases.hashicorp.com/terraform/$(terraformVersion)/terraform_$(terraformVersion)_linux_amd64.zip"
+              sudo unzip -o /tmp/terraform.zip -d /usr/local/bin/
+              rm -f /tmp/terraform.zip
+              terraform -version
+            displayName: 'Instalar Terraform CLI'
+
           - task: AzureCLI@2
             displayName: 'Destroy VM'
             inputs:
@@ -46,6 +56,15 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
+          - checkout: self
+
+          - bash: |
+              curl -fsSL -o /tmp/terraform.zip "https://releases.hashicorp.com/terraform/$(terraformVersion)/terraform_$(terraformVersion)_linux_amd64.zip"
+              sudo unzip -o /tmp/terraform.zip -d /usr/local/bin/
+              rm -f /tmp/terraform.zip
+              terraform -version
+            displayName: 'Instalar Terraform CLI'
+
           - task: AzureCLI@2
             displayName: 'Destroy Network'
             inputs:
@@ -71,6 +90,15 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
+          - checkout: self
+
+          - bash: |
+              curl -fsSL -o /tmp/terraform.zip "https://releases.hashicorp.com/terraform/$(terraformVersion)/terraform_$(terraformVersion)_linux_amd64.zip"
+              sudo unzip -o /tmp/terraform.zip -d /usr/local/bin/
+              rm -f /tmp/terraform.zip
+              terraform -version
+            displayName: 'Instalar Terraform CLI'
+
           - task: AzureCLI@2
             displayName: 'Destroy Resource Group'
             inputs:

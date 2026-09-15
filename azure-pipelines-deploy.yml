@@ -9,6 +9,7 @@ variables:
   backendResourceGroup: 'rg-terraform-br'
   backendStorageAccount: 'sttfstatev2pereira8950'
   backendContainer: 'tfstate'
+  terraformVersion: '1.9.5'
 
 stages:
   - stage: DeployResourceGroup
@@ -18,6 +19,15 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
+          - checkout: self
+
+          - bash: |
+              curl -fsSL -o /tmp/terraform.zip "https://releases.hashicorp.com/terraform/$(terraformVersion)/terraform_$(terraformVersion)_linux_amd64.zip"
+              sudo unzip -o /tmp/terraform.zip -d /usr/local/bin/
+              rm -f /tmp/terraform.zip
+              terraform -version
+            displayName: 'Instalar Terraform CLI'
+
           - task: AzureCLI@2
             displayName: 'Apply Resource Group'
             inputs:
@@ -43,6 +53,15 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
+          - checkout: self
+
+          - bash: |
+              curl -fsSL -o /tmp/terraform.zip "https://releases.hashicorp.com/terraform/$(terraformVersion)/terraform_$(terraformVersion)_linux_amd64.zip"
+              sudo unzip -o /tmp/terraform.zip -d /usr/local/bin/
+              rm -f /tmp/terraform.zip
+              terraform -version
+            displayName: 'Instalar Terraform CLI'
+
           - task: AzureCLI@2
             displayName: 'Apply Network'
             inputs:
@@ -68,6 +87,15 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
+          - checkout: self
+
+          - bash: |
+              curl -fsSL -o /tmp/terraform.zip "https://releases.hashicorp.com/terraform/$(terraformVersion)/terraform_$(terraformVersion)_linux_amd64.zip"
+              sudo unzip -o /tmp/terraform.zip -d /usr/local/bin/
+              rm -f /tmp/terraform.zip
+              terraform -version
+            displayName: 'Instalar Terraform CLI'
+
           - task: AzureCLI@2
             displayName: 'Apply VM'
             inputs:
