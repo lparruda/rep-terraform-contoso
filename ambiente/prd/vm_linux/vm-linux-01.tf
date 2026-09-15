@@ -59,7 +59,7 @@ module "vm_teste_1" {
   os_disk_storage_account_type = "Standard_LRS"
 
   network_interfaces = {
-    "vm_linux_data_nic" = {
+    "vm_linux_data_nic_1" = {
       ip_configuration_name         = "internal"
       private_ip_address_allocation = "Dynamic"
       private_ip_address            = null
@@ -78,6 +78,6 @@ module "vm_teste_1" {
 
 # 4. Associação NSG com a NIC
 resource "azurerm_network_interface_security_group_association" "nic_nsg_1" {
-  network_interface_id      = module.vm_teste_1.nic_ids["vm_linux_data_nic"]
+  network_interface_id      = module.vm_teste_1.nic_ids["vm_linux_data_nic_1"]
   network_security_group_id = azurerm_network_security_group.nsg_vm_linux_1.id
 }
