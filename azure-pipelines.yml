@@ -1,0 +1,95 @@
+trigger:
+  branches:
+    include:
+      - main
+      - teste
+
+variables:
+  azureServiceConnection: 'sc-azure-subscription'
+  backendResourceGroup: 'rg-terraform-br'
+  backendStorageAccount: 'sttfstatev2pereira8950'
+  backendContainer: 'tfstate'
+
+stages:
+  - stage: DeployResourceGroup
+    displayName: '1. Deploy Resource Group'
+    jobs:
+      - job: RGJob
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: 'latest'
+          - task: AzureCLI@2
+            displayName: 'Apply Resource Group'
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/resource_groups'
+              inlineScript: |
+                set -e
+                terraform init \
+                  -backend-config="resource_group_name=$(backendResourceGroup)" \
+                  -backend-config="storage_account_name=$(backendStorageAccount)" \
+                  -backend-config="container_name=$(backendContainer)" \
+                  -backend-config="key=contoso-rg.tfstate"
+                terraform plan -out=tfplan
+                terraform apply -auto-approve tfplan
+
+  - stage: DeployNetwork
+    displayName: '2. Deploy Virtual Network'
+    dependsOn: DeployResourceGroup
+    jobs:
+      - job: NetJob
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: 'latest'
+          - task: AzureCLI@2
+            displayName: 'Apply Network'
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/network_prd'
+              inlineScript: |
+                set -e
+                terraform init \
+                  -backend-config="resource_group_name=$(backendResourceGroup)" \
+                  -backend-config="storage_account_name=$(backendStorageAccount)" \
+                  -backend-config="container_name=$(backendContainer)" \
+                  -backend-config="key=contoso-vnet.tfstate"
+                terraform plan -out=tfplan
+                terraform apply -auto-approve tfplan
+
+  - stage: DeployVM
+    displayName: '3. Deploy Linux VM'
+    dependsOn: DeployNetwork
+    jobs:
+      - job: VMJob
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: 'latest'
+          - task: AzureCLI@2
+            displayName: 'Apply VM'
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/prd/vm_linux'
+              inlineScript: |
+                set -e
+                terraform init \
+                  -backend-config="resource_group_name=$(backendResourceGroup)" \
+                  -backend-config="storage_account_name=$(backendStorageAccount)" \
+                  -backend-config="container_name=$(backendContainer)" \
+                  -backend-config="key=contoso-vm.tfstate"
+                terraform plan -out=tfplan
+                terraform apply -auto-approve tfplan

@@ -1,7 +1,7 @@
 module "vm_teste" {
   source = "../../../modulos/vm_linux"
 
-  resource_group_name             = "rg-bradesco-prd"
+  resource_group_name             = "rg-contoso-prd"
   local                           = "brazilsouth"
   vm_name                         = "vmlinux1"
   size                            = "Standard_F2"
@@ -19,7 +19,7 @@ module "vm_teste" {
       private_ip_address_allocation = "Dynamic"
       private_ip_address            = null
       primary                       = true
-      subnet_id                     = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-bradesco-prd/providers/Microsoft.Network/virtualNetworks/vnet_prd/subnets/subnet_prd1"
+      subnet_id                     = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-prd/providers/Microsoft.Network/virtualNetworks/vnet_prd/subnets/subnet_prd1"
     }
   }
 

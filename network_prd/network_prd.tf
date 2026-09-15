@@ -4,7 +4,7 @@ module "network_prd" {
     vnet_name = "vnet_prd"
     address_space = ["10.0.0.0/16"]
     local = "brazilsouth"
-    resource_group_name = "rg-bradesco-prd"
+    resource_group_name = "rg-contoso-prd"
 
     subnet = {
       "subnet_prd1" = {
