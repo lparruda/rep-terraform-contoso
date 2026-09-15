@@ -1,6 +1,6 @@
 # 1. IP Público Estático Standard
-resource "azurerm_public_ip" "pip_vm_linux_1" {
-  name                = "pip-vm-linux-01"
+resource "azurerm_public_ip" "pip_vm_linux_2" {
+  name                = "pip-vm-linux-02"
   resource_group_name = "rg-contoso-prd"
   location            = "brazilsouth"
   allocation_method   = "Static"
@@ -13,8 +13,8 @@ resource "azurerm_public_ip" "pip_vm_linux_1" {
 }
 
 # 2. Network Security Group (SSH liberado)
-resource "azurerm_network_security_group" "nsg_vm_linux_1" {
-  name                = "nsg-vm-linux-01"
+resource "azurerm_network_security_group" "nsg_vm_linux_2" {
+  name                = "nsg-vm-linux-02"
   resource_group_name = "rg-contoso-prd"
   location            = "brazilsouth"
 
@@ -37,12 +37,12 @@ resource "azurerm_network_security_group" "nsg_vm_linux_1" {
 }
 
 # 3. Módulo VM Linux
-module "vm_teste_1" {
+module "vm_teste_2" {
   source = "../../../modulos/vm_linux"
 
   resource_group_name             = "rg-contoso-prd"
   local                           = "brazilsouth"
-  vm_name                         = "vm-linux-01"
+  vm_name                         = "vm-linux-02"
   size                            = "Standard_D2s_v5"
   disable_password_authentication = false
   admin_username                  = "azroot"
@@ -65,7 +65,7 @@ module "vm_teste_1" {
       private_ip_address            = null
       primary                       = true
       subnet_id                     = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-prd/providers/Microsoft.Network/virtualNetworks/vnet_prd/subnets/subnet_prd1"
-      public_ip_address_id          = azurerm_public_ip.pip_vm_linux_1.id
+      public_ip_address_id          = azurerm_public_ip.pip_vm_linux_2.id
     }
   }
 
@@ -77,7 +77,7 @@ module "vm_teste_1" {
 }
 
 # 4. Associação NSG com a NIC
-resource "azurerm_network_interface_security_group_association" "nic_nsg_1" {
-  network_interface_id      = module.vm_teste_1.nic_ids["vm_linux_data_nic"]
-  network_security_group_id = azurerm_network_security_group.nsg_vm_linux_1.id
+resource "azurerm_network_interface_security_group_association" "nic_nsg_2" {
+  network_interface_id      = module.vm_teste_2.nic_ids["vm_linux_data_nic"]
+  network_security_group_id = azurerm_network_security_group.nsg_vm_linux_2.id
 }
