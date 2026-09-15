@@ -8,3 +8,8 @@ module "rg_prd" {
     }
   }
 }
+
+import {
+  to = module.rg_prd.azurerm_resource_group.rg_prd["rg-contoso-prd"]
+  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-prd"
+}
