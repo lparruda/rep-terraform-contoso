@@ -35,11 +35,18 @@ stages:
             displayName: 'Destroy VM'
             inputs:
               azureSubscription: $(azureServiceConnection)
+              addSpnToEnvironment: true
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/prd/vm_linux'
               inlineScript: |
                 set -e
+                export ARM_USE_OIDC=true
+                export ARM_OIDC_TOKEN="$idToken"
+                export ARM_CLIENT_ID="$servicePrincipalId"
+                export ARM_TENANT_ID="$tenantId"
+                export ARM_SUBSCRIPTION_ID="ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2"
+
                 terraform init \
                   -backend-config="resource_group_name=$(backendResourceGroup)" \
                   -backend-config="storage_account_name=$(backendStorageAccount)" \
@@ -69,11 +76,18 @@ stages:
             displayName: 'Destroy Network'
             inputs:
               azureSubscription: $(azureServiceConnection)
+              addSpnToEnvironment: true
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               workingDirectory: '$(System.DefaultWorkingDirectory)/network_prd'
               inlineScript: |
                 set -e
+                export ARM_USE_OIDC=true
+                export ARM_OIDC_TOKEN="$idToken"
+                export ARM_CLIENT_ID="$servicePrincipalId"
+                export ARM_TENANT_ID="$tenantId"
+                export ARM_SUBSCRIPTION_ID="ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2"
+
                 terraform init \
                   -backend-config="resource_group_name=$(backendResourceGroup)" \
                   -backend-config="storage_account_name=$(backendStorageAccount)" \
@@ -103,11 +117,18 @@ stages:
             displayName: 'Destroy Resource Group'
             inputs:
               azureSubscription: $(azureServiceConnection)
+              addSpnToEnvironment: true
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               workingDirectory: '$(System.DefaultWorkingDirectory)/resource_groups'
               inlineScript: |
                 set -e
+                export ARM_USE_OIDC=true
+                export ARM_OIDC_TOKEN="$idToken"
+                export ARM_CLIENT_ID="$servicePrincipalId"
+                export ARM_TENANT_ID="$tenantId"
+                export ARM_SUBSCRIPTION_ID="ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2"
+
                 terraform init \
                   -backend-config="resource_group_name=$(backendResourceGroup)" \
                   -backend-config="storage_account_name=$(backendStorageAccount)" \
