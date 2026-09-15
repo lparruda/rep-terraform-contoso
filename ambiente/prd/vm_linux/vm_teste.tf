@@ -12,7 +12,7 @@ resource "azurerm_public_ip" "pip_vm_linux" {
   }
 }
 
-# 2. Network Security Group (SSH - Porta 22)
+# 2. Network Security Group (SSH liberado)
 resource "azurerm_network_security_group" "nsg_vm_linux" {
   name                = "nsg-vmlinux1"
   resource_group_name = "rg-contoso-prd"
@@ -48,6 +48,13 @@ module "vm_teste" {
   admin_username                  = "azroot"
   admin_password                  = "AlexDumas2051"
 
+  source_image_reference = {
+    publisher = "Canonical"
+    offer     = "ubuntu-24_04-lts"
+    sku       = "server"
+    version   = "latest"
+  }
+
   os_disk_caching              = "ReadWrite"
   os_disk_storage_account_type = "Standard_LRS"
 
@@ -69,13 +76,13 @@ module "vm_teste" {
   }
 }
 
-# 4. Associação do NSG à NIC da VM
+# 4. Associação NSG com a NIC
 resource "azurerm_network_interface_security_group_association" "nic_nsg" {
   network_interface_id      = module.vm_teste.nic_ids["vm_linux_data_nic"]
   network_security_group_id = azurerm_network_security_group.nsg_vm_linux.id
 }
 
-# 5. Output para exibir o IP gerado após o apply
+# 5. Saída do IP Público
 output "vm_public_ip" {
   value = azurerm_public_ip.pip_vm_linux.ip_address
 }
