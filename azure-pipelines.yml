@@ -18,9 +18,6 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: TerraformInstaller@0
-            inputs:
-              terraformVersion: 'latest'
           - task: AzureCLI@2
             displayName: 'Apply Resource Group'
             inputs:
@@ -46,9 +43,6 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: TerraformInstaller@0
-            inputs:
-              terraformVersion: 'latest'
           - task: AzureCLI@2
             displayName: 'Apply Network'
             inputs:
@@ -74,9 +68,6 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: TerraformInstaller@0
-            inputs:
-              terraformVersion: 'latest'
           - task: AzureCLI@2
             displayName: 'Apply VM'
             inputs:

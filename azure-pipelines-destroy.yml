@@ -21,9 +21,6 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: TerraformInstaller@0
-            inputs:
-              terraformVersion: 'latest'
           - task: AzureCLI@2
             displayName: 'Destroy VM'
             inputs:
@@ -49,9 +46,6 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: TerraformInstaller@0
-            inputs:
-              terraformVersion: 'latest'
           - task: AzureCLI@2
             displayName: 'Destroy Network'
             inputs:
@@ -77,9 +71,6 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - task: TerraformInstaller@0
-            inputs:
-              terraformVersion: 'latest'
           - task: AzureCLI@2
             displayName: 'Destroy Resource Group'
             inputs:
