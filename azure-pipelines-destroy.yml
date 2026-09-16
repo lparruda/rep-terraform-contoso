@@ -6,6 +6,21 @@ parameters:
     type: boolean
     default: false
 
+  - name: destroyWindows
+    displayName: 'Destruir VMs Windows?'
+    type: boolean
+    default: true
+
+  - name: destroyLinux
+    displayName: 'Destruir VMs Linux?'
+    type: boolean
+    default: true
+
+  - name: destroyBase
+    displayName: 'Destruir Base (Rede e Resource Group)?'
+    type: boolean
+    default: true
+
 variables:
   azureServiceConnection: 'sc-azure-subscription'
   backendResourceGroup: 'rg-terraform-br'
@@ -14,11 +29,11 @@ variables:
   terraformVersion: '1.9.5'
 
 stages:
-  - stage: DestroyVM
-    displayName: '1. Teardown Linux VM'
-    condition: eq('${{ parameters.confirmDestroy }}', true)
+  - stage: DestroyWindowsVM
+    displayName: '1. Teardown Windows VM'
+    condition: and(eq('${{ parameters.confirmDestroy }}', true), eq('${{ parameters.destroyWindows }}', true))
     jobs:
-      - job: DestroyVMJob
+      - job: DestroyWinJob
         pool:
           vmImage: 'ubuntu-latest'
         steps:
@@ -32,7 +47,47 @@ stages:
             displayName: 'Instalar Terraform CLI'
 
           - task: AzureCLI@2
-            displayName: 'Destroy VM'
+            displayName: 'Destroy Windows VM'
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              addSpnToEnvironment: true
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/prd/vm_windows'
+              inlineScript: |
+                set -e
+                export ARM_USE_OIDC=true
+                export ARM_OIDC_TOKEN="$idToken"
+                export ARM_CLIENT_ID="$servicePrincipalId"
+                export ARM_TENANT_ID="$tenantId"
+                export ARM_SUBSCRIPTION_ID="ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2"
+
+                terraform init \
+                  -backend-config="resource_group_name=$(backendResourceGroup)" \
+                  -backend-config="storage_account_name=$(backendStorageAccount)" \
+                  -backend-config="container_name=$(backendContainer)" \
+                  -backend-config="key=contoso-vm-windows.tfstate"
+                terraform destroy -auto-approve
+
+  - stage: DestroyLinuxVM
+    displayName: '2. Teardown Linux VM'
+    condition: and(eq('${{ parameters.confirmDestroy }}', true), eq('${{ parameters.destroyLinux }}', true))
+    jobs:
+      - job: DestroyLinuxJob
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - checkout: self
+
+          - bash: |
+              curl -fsSL -o /tmp/terraform.zip "https://releases.hashicorp.com/terraform/$(terraformVersion)/terraform_$(terraformVersion)_linux_amd64.zip"
+              sudo unzip -o /tmp/terraform.zip -d /usr/local/bin/
+              rm -f /tmp/terraform.zip
+              terraform -version
+            displayName: 'Instalar Terraform CLI'
+
+          - task: AzureCLI@2
+            displayName: 'Destroy Linux VM'
             inputs:
               azureSubscription: $(azureServiceConnection)
               addSpnToEnvironment: true
@@ -55,9 +110,11 @@ stages:
                 terraform destroy -auto-approve
 
   - stage: DestroyNetwork
-    displayName: '2. Teardown Virtual Network'
-    dependsOn: DestroyVM
-    condition: and(succeeded(), eq('${{ parameters.confirmDestroy }}', true))
+    displayName: '3. Teardown Virtual Network'
+    dependsOn:
+      - DestroyWindowsVM
+      - DestroyLinuxVM
+    condition: and(always(), eq('${{ parameters.confirmDestroy }}', true), eq('${{ parameters.destroyBase }}', true))
     jobs:
       - job: DestroyNetJob
         pool:
@@ -96,9 +153,9 @@ stages:
                 terraform destroy -auto-approve
 
   - stage: DestroyResourceGroup
-    displayName: '3. Teardown Resource Group'
+    displayName: '4. Teardown Resource Group'
     dependsOn: DestroyNetwork
-    condition: and(succeeded(), eq('${{ parameters.confirmDestroy }}', true))
+    condition: and(succeeded(), eq('${{ parameters.confirmDestroy }}', true), eq('${{ parameters.destroyBase }}', true))
     jobs:
       - job: DestroyRGJob
         pool:
