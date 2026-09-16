@@ -5,6 +5,14 @@ trigger: none
 #      - teste
 
 parameters:
+  - name: environment
+    displayName: 'Selecione o Ambiente:'
+    type: string
+    default: dev
+    values:
+      - dev
+      - prd
+
   - name: deployBase
     displayName: '1. Provisionar Base (Resource Group e VNet)?'
     type: boolean
@@ -52,7 +60,7 @@ stages:
               addSpnToEnvironment: true
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/prd/resource_groups'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/${{ parameters.environment }}/resource_groups'
               inlineScript: |
                 set -e
                 export ARM_USE_OIDC=true
@@ -65,7 +73,7 @@ stages:
                   -backend-config="resource_group_name=$(backendResourceGroup)" \
                   -backend-config="storage_account_name=$(backendStorageAccount)" \
                   -backend-config="container_name=$(backendContainer)" \
-                  -backend-config="key=contoso-rg.tfstate"
+                  -backend-config="key=contoso-rg-${{ parameters.environment }}.tfstate"
                 terraform plan -out=tfplan
                 terraform apply -auto-approve tfplan
 
@@ -94,7 +102,7 @@ stages:
               addSpnToEnvironment: true
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/prd/network'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/${{ parameters.environment }}/network'
               inlineScript: |
                 set -e
                 export ARM_USE_OIDC=true
@@ -107,7 +115,7 @@ stages:
                   -backend-config="resource_group_name=$(backendResourceGroup)" \
                   -backend-config="storage_account_name=$(backendStorageAccount)" \
                   -backend-config="container_name=$(backendContainer)" \
-                  -backend-config="key=contoso-vnet.tfstate"
+                  -backend-config="key=contoso-vnet-${{ parameters.environment }}.tfstate"
                 terraform plan -out=tfplan
                 terraform apply -auto-approve tfplan
 
@@ -136,7 +144,7 @@ stages:
               addSpnToEnvironment: true
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/prd/vm_linux'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/${{ parameters.environment }}/vm_linux'
               inlineScript: |
                 set -e
                 export ARM_USE_OIDC=true
@@ -149,7 +157,7 @@ stages:
                   -backend-config="resource_group_name=$(backendResourceGroup)" \
                   -backend-config="storage_account_name=$(backendStorageAccount)" \
                   -backend-config="container_name=$(backendContainer)" \
-                  -backend-config="key=contoso-vm.tfstate"
+                  -backend-config="key=contoso-vm-linux-${{ parameters.environment }}.tfstate"
                 terraform plan -out=tfplan
                 terraform apply -auto-approve tfplan
 
@@ -178,7 +186,7 @@ stages:
               addSpnToEnvironment: true
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/prd/vm_windows'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/${{ parameters.environment }}/vm_windows'
               inlineScript: |
                 set -e
                 export ARM_USE_OIDC=true
@@ -191,6 +199,6 @@ stages:
                   -backend-config="resource_group_name=$(backendResourceGroup)" \
                   -backend-config="storage_account_name=$(backendStorageAccount)" \
                   -backend-config="container_name=$(backendContainer)" \
-                  -backend-config="key=contoso-vm-windows.tfstate"
+                  -backend-config="key=contoso-vm-windows-${{ parameters.environment }}.tfstate"
                 terraform plan -out=tfplan
                 terraform apply -auto-approve tfplan
