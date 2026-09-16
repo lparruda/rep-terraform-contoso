@@ -1,5 +1,5 @@
 module "network_prd" {
-    source = "../modulos/virtual_network"
+    source = "../../../modulos/virtual_network"
 
     vnet_name = "vnet_prd"
     address_space = ["10.0.0.0/16"]

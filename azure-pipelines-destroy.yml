@@ -136,7 +136,7 @@ stages:
               addSpnToEnvironment: true
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/network_prd'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/prd/network'
               inlineScript: |
                 set -e
                 export ARM_USE_OIDC=true
@@ -177,7 +177,7 @@ stages:
               addSpnToEnvironment: true
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/resource_groups'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/prd/resource_groups'
               inlineScript: |
                 set -e
                 export ARM_USE_OIDC=true
