@@ -10,6 +10,11 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    virtual_machine {
+      graceful_shutdown              = false
+      skip_shutdown_and_force_delete = true
+    }
+  }
   use_oidc = true
 }
