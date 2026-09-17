@@ -84,13 +84,17 @@ resource "azurerm_network_interface_security_group_association" "nic_nsg_2" {
 
 resource "azurerm_managed_disk" "disk_linux_02" {
   name                 = "disk-data-vm-linux-02"
-  location             = var.location
-  resource_group_name  = var.resource_group_name
+  location             = "brazilsouth"
+  resource_group_name  = "rg-contoso-dev"
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
   disk_size_gb         = 10
 
-  tags = var.tags
+  tags = {
+    env        = "prd"
+    management = "terraform"
+    vscode     = "teste"
+  }
 }
 
   resource "azurerm_virtual_machine_data_disk_attachment" "attach_linux_02" {
