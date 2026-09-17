@@ -79,3 +79,24 @@ resource "azurerm_network_interface_security_group_association" "nic_nsg_win_2" 
   network_interface_id      = module.vm_win_2.nic_ids["vm_win_data_nic_2"]
   network_security_group_id = azurerm_network_security_group.nsg_vm_win_2.id
 }
+
+resource "azurerm_managed_disk" "disk_win_02" {
+  name                 = "disk-data-vm-win-02"
+  location             = "brazilsouth"
+  resource_group_name  = "rg-contoso-dev"
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = 10
+
+  tags = {
+    env        = "prd"
+    management = "terraform"
+  }
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "attach_win_02" {
+  managed_disk_id    = azurerm_managed_disk.disk_win_02.id
+  virtual_machine_id = module.vm_win_2.vm_id
+  lun                = 10
+  caching            = "ReadWrite"
+}
