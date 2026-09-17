@@ -82,24 +82,24 @@ resource "azurerm_network_interface_security_group_association" "nic_nsg_1" {
   network_security_group_id = azurerm_network_security_group.nsg_vm_linux_1.id
 }
 
-resource "azurerm_managed_disk" "disk_linux_01" {
-  name                 = "disk-data-vm-linux-01"
-  location             = "brazilsouth"
-  resource_group_name  = "rg-contoso-dev"
-  storage_account_type = "Standard_LRS"
-  create_option        = "Empty"
-  disk_size_gb         = 10
+#resource "azurerm_managed_disk" "disk_linux_01" {
+#  name                 = "disk-data-vm-linux-01"
+#  location             = "brazilsouth"
+#  resource_group_name  = "rg-contoso-dev"
+#  storage_account_type = "Standard_LRS"
+#  create_option        = "Empty"
+#  disk_size_gb         = 10
 
-  tags = {
-    env        = "prd"
-    management = "terraform"
-    vscode     = "teste"
-  }
-}
+#  tags = {
+#    env        = "prd"
+#    management = "terraform"
+#    vscode     = "teste"
+#  }
+#}
 
-  resource "azurerm_virtual_machine_data_disk_attachment" "attach_linux_01" {
-  managed_disk_id    = azurerm_managed_disk.disk_linux_01.id
-  virtual_machine_id = module.vm_teste_1.vm_id
-  lun                = 10
-  caching            = "ReadWrite"
-}
+#  resource "azurerm_virtual_machine_data_disk_attachment" "attach_linux_01" {
+#  managed_disk_id    = azurerm_managed_disk.disk_linux_01.id
+#  virtual_machine_id = module.vm_teste_1.vm_id
+#  lun                = 10
+#  caching            = "ReadWrite"
+#}
