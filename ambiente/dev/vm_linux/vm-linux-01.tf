@@ -97,7 +97,7 @@ resource "azurerm_managed_disk" "disk_linux_01" {
   }
 }
 
-  resource "azurerm_virtual_machine_data_disk_attachment" "attach_linux_02" {
+  resource "azurerm_virtual_machine_data_disk_attachment" "attach_linux_01" {
   managed_disk_id    = azurerm_managed_disk.disk_linux_01.id
   virtual_machine_id = module.vm_teste_1.vm_id
   lun                = 10
