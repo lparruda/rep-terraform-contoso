@@ -42,7 +42,7 @@ stages:
     jobs:
       - job: RGJob
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'ubuntu-24.04'
         steps:
           - checkout: self
 
@@ -84,7 +84,7 @@ stages:
     jobs:
       - job: NetJob
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'ubuntu-24.04'
         steps:
           - checkout: self
 
@@ -168,7 +168,7 @@ stages:
     jobs:
       - job: WindowsVMJob
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'ubuntu-24.04'
         steps:
           - checkout: self
 

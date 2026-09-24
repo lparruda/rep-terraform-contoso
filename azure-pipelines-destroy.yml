@@ -43,7 +43,7 @@ stages:
     jobs:
       - job: DestroyWinJob
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'ubuntu-24.04'
         steps:
           - checkout: self
 
@@ -83,7 +83,7 @@ stages:
     jobs:
       - job: DestroyLinuxJob
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'ubuntu-24.04'
         steps:
           - checkout: self
 
@@ -126,7 +126,7 @@ stages:
     jobs:
       - job: DestroyNetJob
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'ubuntu-24.04'
         steps:
           - checkout: self
 
@@ -167,7 +167,7 @@ stages:
     jobs:
       - job: DestroyRGJob
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'ubuntu-24.04'
         steps:
           - checkout: self
 
