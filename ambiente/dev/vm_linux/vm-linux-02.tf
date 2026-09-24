@@ -56,7 +56,7 @@ module "vm_teste_2" {
   }
 
   os_disk_caching              = "ReadWrite"
-  os_disk_storage_account_type = "ssdStandard_lrd"
+  os_disk_storage_account_type = "StandardSSD_LRS"
 
   network_interfaces = {
     "vm_linux_data_nic_2" = {
