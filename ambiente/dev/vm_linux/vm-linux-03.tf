@@ -1,6 +1,6 @@
 # 1. IP Público Estático Standard
-resource "azurerm_public_ip" "pip_vm_linux_2" {
-  name                = "pip-vm-linux-02"
+resource "azurerm_public_ip" "pip_vm_linux_3" {
+  name                = "pip-vm-linux-03"
   resource_group_name = "rg-contoso-dev"
   location            = "brazilsouth"
   allocation_method   = "Static"
@@ -13,8 +13,8 @@ resource "azurerm_public_ip" "pip_vm_linux_2" {
 }
 
 # 2. Network Security Group (SSH liberado)
-resource "azurerm_network_security_group" "nsg_vm_linux_2" {
-  name                = "nsg-vm-linux-02"
+resource "azurerm_network_security_group" "nsg_vm_linux_3" {
+  name                = "nsg-vm-linux-03"
   resource_group_name = "rg-contoso-dev"
   location            = "brazilsouth"
 
@@ -37,12 +37,12 @@ resource "azurerm_network_security_group" "nsg_vm_linux_2" {
 }
 
 # 3. Módulo VM Linux
-module "vm_teste_2" {
+module "vm_teste_3" {
   source = "../../../modulos/vm_linux"
 
   resource_group_name             = "rg-contoso-dev"
   local                           = "brazilsouth"
-  vm_name                         = "vm-linux-02"
+  vm_name                         = "vm-linux-03"
   size                            = "Standard_D2s_v5"
   disable_password_authentication = false
   admin_username                  = "azroot"
@@ -59,13 +59,13 @@ module "vm_teste_2" {
   os_disk_storage_account_type = "ssdStandard_lrd"
 
   network_interfaces = {
-    "vm_linux_data_nic_2" = {
+    "vm_linux_data_nic_3" = {
       ip_configuration_name         = "internal"
       private_ip_address_allocation = "Dynamic"
       private_ip_address            = null
       primary                       = true
       subnet_id                     = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/virtualNetworks/vnet_dev/subnets/subnet_dev1"
-      public_ip_address_id          = azurerm_public_ip.pip_vm_linux_2.id
+      public_ip_address_id          = azurerm_public_ip.pip_vm_linux_3.id
     }
   }
 
@@ -77,13 +77,13 @@ module "vm_teste_2" {
 }
 
 # 4. Associação NSG com a NIC
-resource "azurerm_network_interface_security_group_association" "nic_nsg_2" {
-  network_interface_id      = module.vm_teste_2.nic_ids["vm_linux_data_nic_2"]
-  network_security_group_id = azurerm_network_security_group.nsg_vm_linux_2.id
+resource "azurerm_network_interface_security_group_association" "nic_nsg_3" {
+  network_interface_id      = module.vm_teste_3.nic_ids["vm_linux_data_nic_3"]
+  network_security_group_id = azurerm_network_security_group.nsg_vm_linux_3.id
 }
 
-#resource "azurerm_managed_disk" "disk_linux_02" {
-#  name                 = "disk-data-vm-linux-02"
+#resource "azurerm_managed_disk" "disk_linux_03" {
+#  name                 = "disk-data-vm-linux-03"
 #  location             = "brazilsouth"
 #  resource_group_name  = "rg-contoso-dev"
 #  storage_account_type = "Standard_LRS"
@@ -97,9 +97,9 @@ resource "azurerm_network_interface_security_group_association" "nic_nsg_2" {
 #  }
 #}
 
-#  resource "azurerm_virtual_machine_data_disk_attachment" "attach_linux_02" {
-#  managed_disk_id    = azurerm_managed_disk.disk_linux_02.id
-#  virtual_machine_id = module.vm_teste_2.vm_id
+#  resource "azurerm_virtual_machine_data_disk_attachment" "attach_linux_03" {
+#  managed_disk_id    = azurerm_managed_disk.disk_linux_03.id
+#  virtual_machine_id = module.vm_teste_3.vm_id
 #  lun                = 10
 #  caching            = "ReadWrite"
 #}
