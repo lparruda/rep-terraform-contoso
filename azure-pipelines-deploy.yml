@@ -126,7 +126,7 @@ stages:
     jobs:
       - job: LinuxVMJob
         pool:
-          vmImage: 'ubuntu-latest'
+           vmImage: 'ubuntu-24.04'
         steps:
           - checkout: self
 
