@@ -25,10 +25,8 @@ for_each = { for k, v in var.azurerm_network_security_rule : k => v if v.priorit
   }
 
 resource "azurerm_subnet_network_security_group_association" "example" {
-  
-  for_each = var.azurerm_subnet_network_security_group_association
+  for_each = { for k, v in var.azurerm_subnet_network_security_group_association : k => v if v.subnet_id != null }
+
   subnet_id                 = each.value.subnet_id
   network_security_group_id = azurerm_network_security_group.example.id
 }
-  
-

@@ -13,28 +13,28 @@ resource "azurerm_public_ip" "pip_vm_linux_2" {
 }
 
 # 2. Network Security Group (SSH liberado)
-resource "azurerm_network_security_group" "nsg_vm_linux_2" {
-  name                = "nsg-vm-linux-02"
-  resource_group_name = "rg-contoso-dev"
-  location            = "brazilsouth"
+# resource "azurerm_network_security_group" "nsg_vm_linux_2" {
+#   name                = "nsg-vm-linux-02"
+#   resource_group_name = "rg-contoso-dev"
+#   location            = "brazilsouth"
 
-  security_rule {
-    name                       = "Allow-SSH"
-    priority                   = 1000
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
+#   security_rule {
+#     name                       = "Allow-SSH"
+#     priority                   = 1000
+#     direction                  = "Inbound"
+#     access                     = "Allow"
+#     protocol                   = "Tcp"
+#     source_port_range          = "*"
+#     destination_port_range     = "22"
+#     source_address_prefix      = "*"
+#     destination_address_prefix = "*"
+#   }
 
-  tags = {
-    env        = "prd"
-    management = "terraform"
-  }
-}
+#   tags = {
+#     env        = "prd"
+#     management = "terraform"
+#   }
+# }
 
 # 3. Módulo VM Linux
 module "vm_teste_2" {
@@ -79,7 +79,7 @@ module "vm_teste_2" {
 # 4. Associação NSG com a NIC
 resource "azurerm_network_interface_security_group_association" "nic_nsg_2" {
   network_interface_id      = module.vm_teste_2.nic_ids["vm_linux_data_nic_2"]
-  network_security_group_id = azurerm_network_security_group.nsg_vm_linux_2.id
+  network_security_group_id = module.nsg_swarm.id
 }
 
 #resource "azurerm_managed_disk" "disk_linux_02" {
