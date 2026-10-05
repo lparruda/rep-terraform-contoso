@@ -77,10 +77,10 @@ module "vm_teste_2" {
 }
 
 # 4. Associação NSG com a NIC
-resource "azurerm_network_interface_security_group_association" "nic_nsg_2" {
-  network_interface_id      = module.vm_teste_2.nic_ids["vm_linux_data_nic_2"]
-  network_security_group_id = module.nsg_swarm.id
-}
+#resource "azurerm_network_interface_security_group_association" "nic_nsg_1" {
+#  network_interface_id      = module.vm_teste_1.nic_ids["vm_linux_data_nic_1"]
+#  network_security_group_id = module.nsg_swarm.id
+#}
 
 #resource "azurerm_managed_disk" "disk_linux_02" {
 #  name                 = "disk-data-vm-linux-02"
