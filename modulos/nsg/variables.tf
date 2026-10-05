@@ -48,17 +48,3 @@ variable "azurerm_subnet_network_security_group_association" {
   }))
   default = {}
 }
-
-variable "azurerm_subnet_network_security_group_association" {
-    type = map(object({
-        subnet_id        = string
-        
-    }))
-    default = {
-      null = {
-        subnet_id = null
-                
-      }
-    }
-  
-}
