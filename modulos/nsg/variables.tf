@@ -42,6 +42,14 @@ variable "azurerm_network_security_rule" {
 }
 
 variable "azurerm_subnet_network_security_group_association" {
+  description = "Mapa de associações entre subnets e o NSG"
+  type = map(object({
+    subnet_id = string
+  }))
+  default = {}
+}
+
+variable "azurerm_subnet_network_security_group_association" {
     type = map(object({
         subnet_id        = string
         
