@@ -33,6 +33,14 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/ambiente/prd/vm_linux'
               inlineScript: |
                 set -e
+
+                echo "=== Desassociando NSG da Subnet SUBNET_DEV2 para liberar o destroy ==="
+                az network vnet subnet update \
+                  --resource-group rg-contoso-dev \
+                  --vnet-name VNET_DEV \
+                  --name SUBNET_DEV2 \
+                  --network-security-group "" || true
+
                 terraform init \
                   -backend-config="resource_group_name=$(backendResourceGroup)" \
                   -backend-config="storage_account_name=$(backendStorageAccount)" \
