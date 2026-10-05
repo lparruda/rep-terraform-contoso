@@ -70,6 +70,14 @@ module "nsg_swarm" {
   }
 }
 
+# Associação do NSG à subnet correta das VMs
+  azurerm_subnet_network_security_group_association = {
+    "assoc_subnet_dev1" = {
+      subnet_id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/virtualNetworks/vnet_dev/subnets/subnet_dev1"
+    }
+  }
+}
+
 # Import declarativo para o Terraform assumir o nsg-swarm sem dar conflito de existência
 #import {
 #  to = module.nsg_swarm.azurerm_network_security_group.example
