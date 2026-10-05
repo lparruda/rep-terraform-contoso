@@ -81,13 +81,6 @@ module "vm_teste_1" {
 #  network_interface_id      = module.vm_teste_1.nic_ids["vm_linux_data_nic_1"]
 #  network_security_group_id = module.nsg_swarm.id
 #}
-# Associação do NSG à subnet correta das VMs
-  azurerm_subnet_network_security_group_association = {
-    "assoc_subnet_dev1" = {
-      subnet_id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/virtualNetworks/vnet_dev/subnets/subnet_dev1"
-    }
-  }
-}
 
 #resource "azurerm_managed_disk" "disk_linux_01" {
 #  name                 = "disk-data-vm-linux-01"
