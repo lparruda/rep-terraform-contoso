@@ -1,5 +1,5 @@
 module "network_dev" {
-  source = "../../modulos/virtual_network"
+  source = "../../../modulos/virtual_network"
 
   vnet_name           = "vnet_dev"
   address_space       = ["10.1.0.0/16"]
