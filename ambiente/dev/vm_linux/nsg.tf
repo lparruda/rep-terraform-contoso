@@ -71,32 +71,32 @@ module "nsg_swarm" {
 }
 
 # Import declarativo para o Terraform assumir o nsg-swarm sem dar conflito de existência
-import {
-  to = module.nsg_swarm.azurerm_network_security_group.example
-  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/networkSecurityGroups/nsg-swarm"
-} 
+#import {
+#  to = module.nsg_swarm.azurerm_network_security_group.example
+#  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/networkSecurityGroups/nsg-swarm"
+#} 
 
-import {
-  to = module.nsg_swarm.azurerm_network_security_rule.security_rule["Allow8080"]
-  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/networkSecurityGroups/nsg-swarm/securityRules/Allow8080"
-}
+#import {
+#  to = module.nsg_swarm.azurerm_network_security_rule.security_rule["Allow8080"]
+#  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/networkSecurityGroups/nsg-swarm/securityRules/Allow8080"
+#}
 
-import {
-  to = module.nsg_swarm.azurerm_network_security_rule.security_rule["AllowSSH"]
-  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/networkSecurityGroups/nsg-swarm/securityRules/AllowSSH"
-}
+#import {
+#  to = module.nsg_swarm.azurerm_network_security_rule.security_rule["AllowSSH"]
+#  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/networkSecurityGroups/nsg-swarm/securityRules/AllowSSH"
+#}
 
-import {
-  to = module.nsg_swarm.azurerm_network_security_rule.security_rule["Allow9090"]
-  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/networkSecurityGroups/nsg-swarm/securityRules/Allow9090"
-}
+#import {
+#  to = module.nsg_swarm.azurerm_network_security_rule.security_rule["Allow9090"]
+#  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/networkSecurityGroups/nsg-swarm/securityRules/Allow9090"
+#}
 
-import {
-  to = module.nsg_swarm.azurerm_network_security_rule.security_rule["AllowHTTP"]
-  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/networkSecurityGroups/nsg-swarm/securityRules/AllowHTTP"
-}
+#import {
+#  to = module.nsg_swarm.azurerm_network_security_rule.security_rule["AllowHTTP"]
+#  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/networkSecurityGroups/nsg-swarm/securityRules/AllowHTTP"
+#}
 
-import {
-  to = module.nsg_swarm.azurerm_network_security_rule.security_rule["AllowDNS"]
-  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/networkSecurityGroups/nsg-swarm/securityRules/AllowDNS"
-}
+#import {
+#  to = module.nsg_swarm.azurerm_network_security_rule.security_rule["AllowDNS"]
+#  id = "/subscriptions/ac1c748c-cf7e-4d1e-82a0-d52c7062c9b2/resourceGroups/rg-contoso-dev/providers/Microsoft.Network/networkSecurityGroups/nsg-swarm/securityRules/AllowDNS"
+#}
