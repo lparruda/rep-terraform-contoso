@@ -34,12 +34,15 @@ stages:
               inlineScript: |
                 set -e
 
-                echo "=== Desassociando NSG da Subnet SUBNET_DEV2 para liberar o destroy ==="
+                echo "=== Desassociando NSG da Subnet SUBNET_DEV2 ==="
                 az network vnet subnet update \
-                  --resource-group rg-contoso-dev \
-                  --vnet-name VNET_DEV \
-                  --name SUBNET_DEV2 \
-                  --network-security-group "" || true
+                  --resource-group "rg-contoso-dev" \
+                  --vnet-name "VNET_DEV" \
+                  --name "SUBNET_DEV2" \
+                  --remove networkSecurityGroup
+
+                echo "=== Aguardando 10s para propagação no plano de controle do Azure ==="
+                sleep 10
 
                 terraform init \
                   -backend-config="resource_group_name=$(backendResourceGroup)" \
